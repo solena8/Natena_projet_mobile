@@ -2,6 +2,8 @@
 
 <!--layout d'un spot de la liste pour s'afficher sur l'écran principal-->
 
+
+
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -21,8 +23,8 @@
 
     <ImageView
         android:id="@+id/spotImage"
-        android:layout_width="300dp"
-        android:layout_height="200dp"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
         android:layout_marginTop="16dp"
         android:contentDescription="Spot Image"
         app:layout_constraintEnd_toEndOf="parent"
