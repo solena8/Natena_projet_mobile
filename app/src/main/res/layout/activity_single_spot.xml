@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--page de détail d'un spot-->
+
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+xmlns:tools="http://schemas.android.com/tools"
+android:id="@+id/singlespot"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+tools:context=".SingleSpotActivity">
+
+<TextView
+    android:id="@+id/spotName"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="16dp"
+    android:text="Cap Ferret"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent" />
+
+<ImageView
+    android:id="@+id/spotImage"
+    android:layout_width="300dp"
+    android:layout_height="200dp"
+    android:layout_marginTop="16dp"
+    android:contentDescription="Spot Image"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@+id/spotName"
+    app:srcCompat="@drawable/cap_ferret"
+    />
+
+
+<TextView
+    android:id="@+id/spotLocation"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="16dp"
+    android:text="Plage du bout"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@id/spotImage" />
+</androidx.constraintlayout.widget.ConstraintLayout>

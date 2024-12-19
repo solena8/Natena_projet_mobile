@@ -1,10 +1,12 @@
 package com.example.natena
 
 import android.os.Bundle
+import android.widget.ListView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.example.natena.models.spots
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -16,5 +18,9 @@ class MainActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+
+        val listView = findViewById<ListView>(R.id.spotlist)
+        val adapter = SpotAdapter(this, spots)
+        listView.adapter = adapter
     }
 }
