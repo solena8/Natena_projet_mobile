@@ -21,6 +21,7 @@ class SpotAdapter(context: Context, private val spots: List<Spot>) :
             R.layout.spot_layout, parent, false
         )
 
+        //@Todo : remplacer ces lignes par la fonction associateDataToRightSpot du fichier FirstDataJson.kt
         // Associe les données du spot aux vues
         val imageView = view.findViewById<ImageView>(R.id.spotImage)
         val nameTextView = view.findViewById<TextView>(R.id.spotName)

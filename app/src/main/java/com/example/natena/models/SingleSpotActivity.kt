@@ -16,6 +16,7 @@ class SingleSpotActivity : AppCompatActivity() {
         val spotName = intent.getStringExtra("spotName")
         val spotLocation = intent.getStringExtra("spotLocation")
 
+        //@Todo : remplacer ces lignes par la fonction associateDataToRightSpot du fichier FirstDataJson.kt
         // Associer les données aux vues
         findViewById<ImageView>(R.id.spotImage).setImageResource(spotImage)
         findViewById<TextView>(R.id.spotName).text = spotName
