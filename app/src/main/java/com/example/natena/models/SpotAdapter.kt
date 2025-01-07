@@ -8,7 +8,6 @@ import android.widget.ArrayAdapter
 import android.widget.ImageView
 import android.widget.TextView
 import com.example.natena.models.Spot
-import com.example.natena.models.jsonSpots
 
 class SpotAdapter(context: Context, private val spots: List<Spot>) :
     ArrayAdapter<Spot>(context, 0, spots) {

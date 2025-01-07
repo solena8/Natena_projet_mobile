@@ -1,8 +1,5 @@
 package com.example.natena.models
 
-import com.example.natena.R
-import com.example.natena.models.associateDataToRightSpot
-
 
 data class Spot(
     val spotImage: Int,
@@ -10,11 +7,5 @@ data class Spot(
     val spotLocation: String
 )
 
-val spots = listOf(
-    Spot(R.drawable.cap_ferret, "Plage du Bout", "Cap Ferret"),
-    Spot(R.drawable.biarritz, "Plage des Pins", "Biarritz"),
-    Spot(R.drawable.barcelone, "Playa Gato", "Barcelona")
-)
-
-val jsonSpots: MutableList<Spot> = mutableListOf()
+val spots: MutableList<Spot> = mutableListOf()
 

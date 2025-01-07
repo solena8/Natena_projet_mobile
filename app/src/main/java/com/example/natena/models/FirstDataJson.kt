@@ -1,7 +1,6 @@
 package com.example.natena.models
 
 import android.content.Context
-import android.util.Log
 import com.example.natena.R
 import com.squareup.moshi.Json
 import com.squareup.moshi.Moshi
@@ -30,27 +29,30 @@ fun parseJson(jsonString: String): SpotsRecords? {
     return adapter.fromJson(jsonString)
 }
 
+//Permet de lire la string json
 fun readJsonFromRaw(context: Context, resourceId: Int): String {
     val inputStream = context.resources.openRawResource(resourceId)
     val bufferedReader = BufferedReader(inputStream.reader())
     return bufferedReader.use { it.readText() }
 }
 
-public fun associateDataToRightSpot(context: Context) {
+//
+public fun createSpotsFromJson(context: Context) {
     val jsonString = readJsonFromRaw(context, R.raw.first_datas)
     val parsedData = parseJson(jsonString)
 
-    // Afficher les résultats
+    // Création d'un spot pour chaque élément au sein de records après avoir vérifié que records n'est pas null
     parsedData?.records?.forEach { record ->
         val spot = Spot(
             spotImage = R.drawable.biarritz,
             spotName = record.surfBreak,
             spotLocation = record.address
         )
-        jsonSpots.add(spot)
+        spots.add(spot)
 
-        jsonSpots.forEach { spot ->
+    }
+    // Contrôle en console des spots.
+        spots.forEach { spot ->
             println("Spot: ${spot.spotName}, Location: ${spot.spotLocation}")
         }
-    }
 }
