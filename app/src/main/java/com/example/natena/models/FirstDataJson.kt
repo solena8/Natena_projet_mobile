@@ -44,12 +44,11 @@ public fun createSpotsFromJson(context: Context) {
     // Création d'un spot pour chaque élément au sein de records après avoir vérifié que records n'est pas null
     parsedData?.records?.forEach { record ->
         val spot = Spot(
-            spotImage = R.drawable.biarritz,
+            spotImage = record.photos,
             spotName = record.surfBreak,
             spotLocation = record.address
         )
         spots.add(spot)
-
     }
     // Contrôle en console des spots.
         spots.forEach { spot ->

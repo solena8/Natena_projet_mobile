@@ -2,7 +2,7 @@ package com.example.natena.models
 
 
 data class Spot(
-    val spotImage: Int,
+    val spotImage: String,
     val spotName: String,
     val spotLocation: String
 )

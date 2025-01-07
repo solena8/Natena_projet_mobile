@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.ImageView
 import android.widget.TextView
+import com.bumptech.glide.Glide
 import com.example.natena.models.Spot
 
 class SpotAdapter(context: Context, private val spots: List<Spot>) :
@@ -28,7 +29,11 @@ class SpotAdapter(context: Context, private val spots: List<Spot>) :
 
         // Remplit les données
         spot?.let {
-            imageView.setImageResource(it.spotImage)
+            //Chargement de l'image
+            Glide.with(context)
+                .load(it.spotImage)
+                .placeholder(R.drawable.placeholder)
+                .into(imageView)
             nameTextView.text = it.spotName
             locationTextView.text = it.spotLocation
         }
