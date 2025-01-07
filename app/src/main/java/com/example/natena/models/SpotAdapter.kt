@@ -8,6 +8,7 @@ import android.widget.ArrayAdapter
 import android.widget.ImageView
 import android.widget.TextView
 import com.example.natena.models.Spot
+import com.example.natena.models.jsonSpots
 
 class SpotAdapter(context: Context, private val spots: List<Spot>) :
     ArrayAdapter<Spot>(context, 0, spots) {
@@ -21,7 +22,6 @@ class SpotAdapter(context: Context, private val spots: List<Spot>) :
             R.layout.spot_layout, parent, false
         )
 
-        //@Todo : remplacer ces lignes par la fonction associateDataToRightSpot du fichier FirstDataJson.kt
         // Associe les données du spot aux vues
         val imageView = view.findViewById<ImageView>(R.id.spotImage)
         val nameTextView = view.findViewById<TextView>(R.id.spotName)

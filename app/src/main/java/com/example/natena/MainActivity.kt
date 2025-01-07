@@ -1,12 +1,17 @@
 package com.example.natena
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.ListView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.example.natena.models.associateDataToRightSpot
+import com.example.natena.models.jsonSpots
+import com.example.natena.models.readJsonFromRaw
 import com.example.natena.models.spots
 
 class MainActivity : AppCompatActivity() {
@@ -21,12 +26,20 @@ class MainActivity : AppCompatActivity() {
         }
 
         val listView = findViewById<ListView>(R.id.spotlist)
-        val adapter = SpotAdapter(this, spots)
+        val adapter = SpotAdapter(this, jsonSpots)
         listView.adapter = adapter
+
+        //Vérification que le json est ok
+        val jsonString = readJsonFromRaw(this, R.raw.first_datas)
+        println("Json debug : `$jsonString`")
+
+        if (jsonSpots.isEmpty()) {
+            associateDataToRightSpot(this)
+        }
 
         listView.setOnItemClickListener { _, _, position, _ ->
             // Récupérer le spot correspondant
-            val selectedSpot = spots[position]
+            val selectedSpot = jsonSpots[position]
 
             // Créer un Intent pour démarrer l'activité de détail
             val intent = Intent(this, SingleSpotActivity::class.java).apply {
@@ -38,6 +51,5 @@ class MainActivity : AppCompatActivity() {
             // Lancer l'activité
             startActivity(intent)
         }
-
     }
 }
