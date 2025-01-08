@@ -2,20 +2,43 @@ package com.example.natena.models
 
 import android.content.Context
 import com.example.natena.R
+import com.squareup.moshi.FromJson
 import com.squareup.moshi.Json
 import com.squareup.moshi.Moshi
+import com.squareup.moshi.ToJson
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import java.io.BufferedReader
 import java.util.Date
+import java.text.SimpleDateFormat
+import java.util.Locale
+
+class DateAdapter {
+    private val dateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.US)
+
+    @FromJson
+    fun fromJson(string: String): Date? {
+        return try {
+            dateFormat.parse(string)
+        } catch (e: Exception) {
+            null
+        }
+    }
+
+    @ToJson
+    fun toJson(date: Date): String {
+        return dateFormat.format(date)
+    }
+}
 
 data class SpotsRecordsComplex(
-    val records: List<SurfSpotComplex>
+    val records: List<SurfSpotComplex>,
+    @Json(name = "offset") val offset: String
 )
 
 data class SurfSpotComplex(
     @Json(name = "id") val recordId: String,
     @Json(name = "fields") val fields: Field,
-    @Json(name = "createdTime") val createdTime: Date
+    @Json(name = "createdTime") val createdTime: Date?
 )
 
 data class Field(
@@ -38,7 +61,13 @@ data class Photos(
     @Json(name = "filename") val filename: String,
     @Json(name = "size") val int: Int,
     @Json(name = "type") val fileType: String,
-    @Json(name = "thumbnails") val thumbnails: PictureSize,
+    @Json(name = "thumbnails") val thumbnails: Thumbnails,
+)
+
+data class Thumbnails(
+    @Json(name = "small") val small: PictureSize,
+    @Json(name = "large") val large: PictureSize,
+    @Json(name = "full") val full: PictureSize
 )
 
 data class PictureSize(
@@ -49,6 +78,7 @@ data class PictureSize(
 
 fun parseComplexJson(jsonString: String): SpotsRecordsComplex? {
     val moshi = Moshi.Builder()
+        .add(DateAdapter())
         .add(KotlinJsonAdapterFactory())
         .build()
 
@@ -64,7 +94,7 @@ fun readComplexJsonFromRaw(context: Context, resourceId: Int): String {
 }
 
 //
-public fun createSpotsFromComplexJson(context: Context) {
+fun createSpotsFromComplexJson(context: Context) {
     val jsonString = readComplexJsonFromRaw(context, R.raw.complex_datas)
     val parsedData = parseComplexJson(jsonString)
 
