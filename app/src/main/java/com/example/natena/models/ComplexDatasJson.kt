@@ -1,6 +1,11 @@
 package com.example.natena.models
 
+import android.content.Context
+import com.example.natena.R
 import com.squareup.moshi.Json
+import com.squareup.moshi.Moshi
+import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
+import java.io.BufferedReader
 import java.util.Date
 
 data class SpotsRecordsComplex(
@@ -14,16 +19,16 @@ data class SurfSpotComplex(
 )
 
 data class Field(
-    @Json(name = "Surf Break") val surfBreak: Array<String>,
+    @Json(name = "Surf Break") val surfBreak: List<String>,
     @Json(name = "Difficulty Level") val difficulty: Int,
     @Json(name = "Destination") val destination: String,
     @Json(name = "Geocode") val geocode: String,
-    @Json(name = "Influencers") val influencers: Array<String>,
-    @Json(name = "Magic Seaweed Link") val magicSeaweedLink: Array<String>,
-    @Json(name = "Photos") val photos: Photos,
+    @Json(name = "Influencers") val influencers: List<String>,
+    @Json(name = "Magic Seaweed Link") val magicSeaweedLink: String,
+    @Json(name = "Photos") val photos: List<Photos>,
     @Json(name = "Peak Surf Season Begins") val peakSurfSeasonBegins: String,
     @Json(name = "Destination State/Country") val destinationState: String,
-    @Json(name = "Peak Surf Season End") val peakSurfSeasonEnds: String,
+    @Json(name = "Peak Surf Season Ends") val peakSurfSeasonEnds: String,
     @Json(name = "Address") val address: String
 )
 
@@ -31,7 +36,7 @@ data class Photos(
     @Json(name = "id") val id: String,
     @Json(name = "url") val url: String,
     @Json(name = "filename") val filename: String,
-    @Json(name = "size") val Int: String,
+    @Json(name = "size") val int: Int,
     @Json(name = "type") val fileType: String,
     @Json(name = "thumbnails") val thumbnails: PictureSize,
 )
@@ -41,3 +46,39 @@ data class PictureSize(
     @Json(name = "width") val width: Int,
     @Json(name = "height") val height: Int,
 )
+
+fun parseComplexJson(jsonString: String): SpotsRecordsComplex? {
+    val moshi = Moshi.Builder()
+        .add(KotlinJsonAdapterFactory())
+        .build()
+
+    val adapter = moshi.adapter(SpotsRecordsComplex::class.java)
+    return adapter.fromJson(jsonString)
+}
+
+//Permet de lire la string json
+fun readComplexJsonFromRaw(context: Context, resourceId: Int): String {
+    val inputStream = context.resources.openRawResource(resourceId)
+    val bufferedReader = BufferedReader(inputStream.reader())
+    return bufferedReader.use { it.readText() }
+}
+
+//
+public fun createSpotsFromComplexJson(context: Context) {
+    val jsonString = readComplexJsonFromRaw(context, R.raw.complex_datas)
+    val parsedData = parseComplexJson(jsonString)
+
+    // Création d'un spot pour chaque élément au sein de records après avoir vérifié que records n'est pas null
+    parsedData?.records?.forEach { record ->
+        val spot = Spot(
+            spotImage = record.fields.photos[0].url,
+            spotName = record.fields.surfBreak[0],
+            spotLocation = record.fields.address
+        )
+        spots.add(spot)
+    }
+    // Contrôle en console des spots.
+    spots.forEach { spot ->
+        println("Spot: ${spot.spotName}, Location: ${spot.spotLocation}")
+    }
+}
