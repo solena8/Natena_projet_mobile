@@ -12,24 +12,28 @@ import java.util.Date
 import java.text.SimpleDateFormat
 import java.util.Locale
 
+// Classe qui permet de gérer les dates.
 class DateAdapter {
     private val dateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.US)
 
     @FromJson
     fun fromJson(string: String): Date? {
         return try {
+            //@Todo A modifier pour que la date retournée soit sous le format français.
             dateFormat.parse(string)
         } catch (e: Exception) {
             null
         }
     }
 
+    //@Todo A modifier pour que la date retournée soit sous le format français.
     @ToJson
     fun toJson(date: Date): String {
         return dateFormat.format(date)
     }
 }
 
+//En soit, on n'est pas obligés de faire un DTO qui soit le miroir de notre JSON, mais si on avait le temps d'implémenter plusieurs features, on serait très content d'avoir un DTO complet
 data class SpotsRecordsComplex(
     val records: List<SurfSpotComplex>,
     @Json(name = "offset") val offset: String
@@ -93,8 +97,8 @@ fun readComplexJsonFromRaw(context: Context, resourceId: Int): String {
     return bufferedReader.use { it.readText() }
 }
 
-//
 fun createSpotsFromComplexJson(context: Context) {
+    //Récupération du JSON sous le format string
     val jsonString = readComplexJsonFromRaw(context, R.raw.complex_datas)
     val parsedData = parseComplexJson(jsonString)
 
