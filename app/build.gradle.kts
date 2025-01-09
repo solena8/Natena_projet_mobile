@@ -62,6 +62,19 @@ dependencies {
     implementation(libs.moshi)
     implementation(libs.moshi.kotlin)
     implementation(libs.glide)
+    implementation(libs.retrofit)
+    implementation(libs.retrofit2.kotlinx.serialization.converter)
+    implementation (libs.retrofit2.kotlinx.serialization.converter.v080)
+    implementation(libs.okhttp.v4110)
+    implementation (libs.squareup.converter.gson)
+    implementation (libs.kotlinx.coroutines.android)
+    implementation(libs.kotlinx.serialization.json)
+    implementation (libs.kotlinx.serialization.json.v150)
+
+
+    implementation(libs.okhttp3.okhttp)
+    implementation (libs.okhttp3.logging.interceptor)
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
