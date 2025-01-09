@@ -1,9 +1,11 @@
 package com.example.natena.network
 
-private const val BASE_ID = "appzBKIwgW3EG2YXJ"
+import com.example.natena.BuildConfig
 
-private const val TABLE_ID = "tblRuaa61gtDvzAt2"
+const val BASE_ID = BuildConfig.BASE_ID
+const val TABLE_ID = BuildConfig.TABLE_ID
+const val API_KEY = BuildConfig.API_KEY
 
 private const val BASE_URL =
-    "https://api.airtable.com/v0/appzBKIwgW3EG2YXJ/tblRuaa61gtDvzAt2"
+    "https://api.airtable.com/v0/$BASE_ID/$TABLE_ID"
 
