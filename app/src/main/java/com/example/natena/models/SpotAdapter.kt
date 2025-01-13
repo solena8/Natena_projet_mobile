@@ -1,4 +1,4 @@
-package com.example.natena
+package com.example.natena.models
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -8,7 +8,7 @@ import android.widget.ArrayAdapter
 import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.Glide
-import com.example.natena.models.Spot
+import com.example.natena.R
 
 class SpotAdapter(context: Context, private val spots: List<Spot>) :
     ArrayAdapter<Spot>(context, 0, spots) {

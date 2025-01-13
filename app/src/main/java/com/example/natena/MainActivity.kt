@@ -7,9 +7,10 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import com.example.natena.models.createSpotsFromJson
+import com.example.natena.models.SpotAdapter
+import com.example.natena.models.createSpotsFromComplexJson
 import com.example.natena.models.spots
-import com.example.natena.models.readJsonFromRaw
+import com.example.natena.models.readComplexJsonFromRaw
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -27,12 +28,12 @@ class MainActivity : AppCompatActivity() {
         listView.adapter = adapter
 
         //Vérification que le json est ok
-        val jsonString = readJsonFromRaw(this, R.raw.first_datas)
+        val jsonString = readComplexJsonFromRaw(this, R.raw.complex_datas)
         println("Json debug : `$jsonString`")
 
         //Condition pour empêcher que la fonction se lance si les spots sont déjà initialisés.
         if (spots.isEmpty()) {
-            createSpotsFromJson(this)
+            createSpotsFromComplexJson(this)
         }
 
         listView.setOnItemClickListener { _, _, position, _ ->

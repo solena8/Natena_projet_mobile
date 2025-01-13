@@ -16,7 +16,7 @@ data class SurfSpot(
 )
 
 data class SpotsRecords(
-    val records: List<SurfSpot>
+    val records: List<SurfSpot>,
 )
 
 //Transforme le Json en jsonString pour que Kotlin puisse le lire
@@ -37,7 +37,7 @@ fun readJsonFromRaw(context: Context, resourceId: Int): String {
 }
 
 //
-public fun createSpotsFromJson(context: Context) {
+fun createSpotsFromJson(context: Context) {
     val jsonString = readJsonFromRaw(context, R.raw.first_datas)
     val parsedData = parseJson(jsonString)
 
