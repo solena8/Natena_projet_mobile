@@ -32,6 +32,7 @@ android {
         buildConfigField("String", "BASE_ID", "\"${secrets["BASE_ID"]}\"")
         buildConfigField("String", "TABLE_ID", "\"${secrets["TABLE_ID"]}\"")
         buildConfigField("String", "API_KEY", "\"${secrets["API_KEY"]}\"")
+        buildConfigField("String", "BACK_API_URL", "\"${secrets["BACK_API_URL"]}\"")
     }
 
     buildTypes {

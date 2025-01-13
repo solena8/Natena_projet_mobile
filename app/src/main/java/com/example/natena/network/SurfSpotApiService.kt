@@ -2,55 +2,54 @@ package com.example.natena.network
 
 import com.example.natena.BuildConfig
 import com.example.natena.models.Photos
-import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
-import kotlinx.serialization.json.Json
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
-import okhttp3.MediaType.Companion.toMediaType
 
-const val BASE_ID = BuildConfig.BASE_ID
-const val TABLE_ID = BuildConfig.TABLE_ID
-const val API_KEY = BuildConfig.API_KEY
-
-private const val BASE_URL =
-    "https://api.airtable.com/v0/$BASE_ID/$TABLE_ID"
-
+const val BACK_API_URL = BuildConfig.BACK_API_URL
+// Interceptor pour ajouter des entêtes ou autres transformations
 val apiInterceptor = Interceptor { chain ->
     val request: Request = chain.request().newBuilder()
-        .addHeader("Authorization", "Bearer $API_KEY")
         .build()
     chain.proceed(request)
 }
 
+// Client OkHttp configuré avec les interceptors
 val client = OkHttpClient.Builder()
     .addInterceptor(apiInterceptor)
     .addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
     .build()
 
+// Retrofit instance
 private val retrofit = Retrofit.Builder()
-    .addConverterFactory(Json.asConverterFactory("application/json".toMediaType()))
-    .client(client)
-    .baseUrl(BASE_URL)
+    .baseUrl(BACK_API_URL)
+    .addConverterFactory(GsonConverterFactory.create())  // Convertisseur JSON
+    .client(client)  // Ajout du client OkHttp
     .build()
 
+// Service d'API
 interface SurfSpotApiService {
-    @GET("Photos")
-    suspend fun getSpotPhotos(): List<Photos>
-
-    @GET("fldakCEOY7OpvS3RR")
-    suspend fun getSpotName(): String
-
-    @GET("Address")
-    suspend fun getSpotLocation(): String
+    @GET("/")  // Endpoint pour récupérer les données
+    suspend fun getAllItems(): Map<String, Any>  // Retourne les données sous forme de dictionnaire
 }
 
+// Singleton pour l'API
 object SurfSpotApi {
     val retrofitService: SurfSpotApiService by lazy {
         retrofit.create(SurfSpotApiService::class.java)
     }
 }
+
+// Fonction pour récupérer les données (via Retrofit)
+suspend fun fetchAllItems(): Map<String, Any> {
+        val response = SurfSpotApi.retrofitService.getAllItems()
+        return response
+
+}
+
+
 
