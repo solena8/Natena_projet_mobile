@@ -1,10 +1,10 @@
 package com.example.natena.models
 
 
-class Spot(
-    val spotImage: String,
+data class Spot(
     val spotName: String,
-    val spotLocation: String
+    val spotLocation: String,
+    val spotImage: String
 )
 
 val spots: MutableList<Spot> = mutableListOf()

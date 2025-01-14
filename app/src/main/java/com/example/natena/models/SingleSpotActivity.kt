@@ -14,8 +14,8 @@ class SingleSpotActivity : AppCompatActivity() {
 
         // Récupérer les données transmises via l'intent
         val spotImage = intent.getStringExtra("spotImage")
-        val spotName = intent.getStringExtra("spotName")
-        val spotLocation = intent.getStringExtra("spotLocation")
+        val spotName = intent.getStringExtra("Location")
+        val spotLocation = intent.getStringExtra("Address")
 
         // Associer les données aux vues
         val imageView = findViewById<ImageView>(R.id.spotImage)
