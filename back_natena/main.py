@@ -5,7 +5,7 @@ from pathlib import Path  # Gestion des chemins de fichier
 app = FastAPI()
 
 # Chemin vers le fichier JSON
-json_file_path = Path("complex_data_json.json")
+json_file_path = Path("complex_data.json")
 
 # Charger les données JSON au démarrage de l'application
 def load_json_data(file_path: Path):
