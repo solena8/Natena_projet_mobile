@@ -7,6 +7,7 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.ToJson
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
+import kotlinx.serialization.Serializable
 import java.io.BufferedReader
 import java.util.Date
 import java.text.SimpleDateFormat
@@ -34,17 +35,20 @@ class DateAdapter {
 }
 
 //En soit, on n'est pas obligés de faire un DTO qui soit le miroir de notre JSON, mais si on avait le temps d'implémenter plusieurs features, on serait très content d'avoir un DTO complet
+@Serializable
 data class SpotsRecordsComplex(
     val records: List<SurfSpotComplex>,
     @Json(name = "offset") val offset: String
 )
 
+@Serializable
 data class SurfSpotComplex(
     @Json(name = "id") val recordId: String,
     @Json(name = "fields") val fields: Field,
     @Json(name = "createdTime") val createdTime: Date?
 )
 
+@Serializable
 data class Field(
     @Json(name = "Surf Break") val surfBreak: List<String>,
     @Json(name = "Difficulty Level") val difficulty: Int,
@@ -59,6 +63,7 @@ data class Field(
     @Json(name = "Address") val address: String
 )
 
+@Serializable
 data class Photos(
     @Json(name = "id") val id: String,
     @Json(name = "url") val url: String,
@@ -68,12 +73,14 @@ data class Photos(
     @Json(name = "thumbnails") val thumbnails: Thumbnails,
 )
 
+@Serializable
 data class Thumbnails(
     @Json(name = "small") val small: PictureSize,
     @Json(name = "large") val large: PictureSize,
     @Json(name = "full") val full: PictureSize
 )
 
+@Serializable
 data class PictureSize(
     @Json(name = "url") val url: String,
     @Json(name = "width") val width: Int,
@@ -97,6 +104,7 @@ fun readComplexJsonFromRaw(context: Context, resourceId: Int): String {
     return bufferedReader.use { it.readText() }
 }
 
+//@Todo modifier cette fonction pour récupérer les informations de l'api
 fun createSpotsFromComplexJson(context: Context) {
     //Récupération du JSON sous le format string
     val jsonString = readComplexJsonFromRaw(context, R.raw.complex_datas)

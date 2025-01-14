@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Fichier de configuration de sécurité réseau pour Android -->
+<network-security-config>
+    <!-- Configuration pour le mode debug uniquement -->
+    <debug-overrides>
+        <trust-anchors>
+            <!-- Autoriser les certificats système et utilisateur en mode debug -->
+            <certificates src="system" /> <!-- Certificats système -->
+            <certificates src="user" />   <!-- Certificats utilisateur -->
+        </trust-anchors>
+    </debug-overrides>
+
+    <!-- Configuration de base pour toute l'application -->
+    <base-config cleartextTrafficPermitted="false">
+        <!-- Interdit le trafic non chiffré (HTTP) par défaut -->
+        <trust-anchors>
+            <!-- N'autoriser que les certificats système pour la production -->
+            <certificates src="system" />
+        </trust-anchors>
+    </base-config>
+
+    <!-- Exception pour permettre le trafic non sécurisé vers une adresse IP spécifique -->
+    <domain-config cleartextTrafficPermitted="true">
+        <!-- Permet le trafic HTTP pour l'adresse 10.0.2.2 (émulateur Android) -->
+        <!-- includeSubdomains="true" applique la règle aux sous-domaines -->
+        <domain includeSubdomains="true">10.0.2.2</domain>
+    </domain-config>
+</network-security-config>
