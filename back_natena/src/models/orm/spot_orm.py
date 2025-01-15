@@ -1,5 +1,4 @@
 from datetime import date, datetime
-
 from sqlalchemy import ForeignKey
 from sqlalchemy import String
 from sqlalchemy.orm import DeclarativeBase
@@ -10,9 +9,10 @@ from sqlalchemy.orm import mapped_column
 class Base(DeclarativeBase):
     pass
 
+
 # Vérifier si on a besoin de rajouter des relationships dans notre orm
 class Spot(Base):
-    __tablename__ = "spot"
+    __tablename__ = 'spot'
     # mapped_column() permet de caractériser plus fortement les champs
     id: Mapped[int] = mapped_column(primary_key=True)
     surf_break_id: Mapped[int] = mapped_column(ForeignKey("surf_break.id"))
@@ -24,3 +24,5 @@ class Spot(Base):
     season_begins: Mapped[date]
     season_ends: Mapped[date]
     created_at: Mapped[datetime]
+
+
