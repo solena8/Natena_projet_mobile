@@ -14,3 +14,4 @@ if not database_exists(engine.url):
 Base.metadata.create_all(engine, tables=[SurfBreak.__table__])
 Base.metadata.create_all(engine, tables=[Spot.__table__])
 Base.metadata.create_all(engine, tables=[Image.__table__])
+
