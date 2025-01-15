@@ -1,6 +1,7 @@
 from sqlalchemy import String
 from sqlalchemy.orm import Mapped, mapped_column
-from src.models.orm.spot_orm import Base
+
+from src.models.orm.base_orm import Base
 
 
 class SurfBreak(Base):

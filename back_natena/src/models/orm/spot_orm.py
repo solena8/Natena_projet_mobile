@@ -1,12 +1,12 @@
 from datetime import date, datetime
-from sqlalchemy import ForeignKey
+
 from sqlalchemy import String
-from sqlalchemy.orm import DeclarativeBase
 from sqlalchemy.orm import Mapped
 from sqlalchemy.orm import mapped_column
 
-class Base(DeclarativeBase):
-    pass
+from src.models.dto.surf_break_dto import SurfBreakDTO
+from src.models.orm.base_orm import Base
+from src.models.orm.surf_break_orm import SurfBreak
 
 # Vérifier si on a besoin de rajouter des relationships dans notre orm
 class Spot(Base):
@@ -23,11 +23,14 @@ class Spot(Base):
     season_ends: Mapped[date]
     created_at: Mapped[datetime]
 
-#     def determineSurfBreakId(self, string):
-#
-#         #remplace les surfs breaks par leur id respectif
-#         #return le json mappé
-#
+    def determineSurfBreakId(self, session):
+        surfBreakFromDB = session.query(SurfBreak).first()
+        result = SurfBreakDTO.extractSurfBreakFromDB(surfBreakFromDB)
+        print("Ouaaaaaaais le résultat : ", result.__dict__)
+
+
+
+
 #     def insertSurfDataFromJson(self):
 #         json_data = self.determineSurfBreakId()
 #         spot_id = 1

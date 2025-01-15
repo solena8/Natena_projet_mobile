@@ -1,6 +1,5 @@
 from dataclasses import dataclass
 
-
 @dataclass
 class SurfBreakDTO:
     id: int
@@ -12,4 +11,5 @@ class SurfBreakDTO:
             id = surfBreak.id,
             type = surfBreak.type
         )
+
 
