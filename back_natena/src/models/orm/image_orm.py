@@ -10,3 +10,4 @@ class Image(Base):
     spot_id: Mapped[int] = mapped_column(ForeignKey("spot.id"))
     url: Mapped[str]
     main: Mapped[bool]
+

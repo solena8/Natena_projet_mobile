@@ -1,14 +1,4 @@
-from ctypes import SetPointerType
-from datetime import datetime
-from random import random
-
 import requests
-import self
-from sqlalchemy.orm import session
-
-from src.models.orm.spot_orm import Spot
-from src.models.orm.surf_break_orm import SurfBreak
-
 
 class FetchDataFromAirtable():
     # @Todo : planquer les IDs
