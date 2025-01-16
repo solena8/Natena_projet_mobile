@@ -1,13 +1,13 @@
 from datetime import date, datetime
 
-from sqlalchemy.orm import Session, relationship, validates
-from sqlalchemy import String, select, ForeignKey
-from sqlalchemy.exc import NoResultFound
-from sqlalchemy.orm import Mapped, session
+from sqlalchemy import String, ForeignKey
+from sqlalchemy.orm import Mapped
+from sqlalchemy.orm import Session, validates
 from sqlalchemy.orm import mapped_column
 
 from src.config.fetch_data_from_airtable import FetchDataFromAirtable
 from src.models.orm.base_orm import Base
+from src.models.orm.image_orm import Image
 from src.models.orm.surf_break_orm import SurfBreak
 
 
@@ -33,8 +33,6 @@ class Spot(Base):
         return value
 
 
-
-
     def insertSurfDataFromJson(self, session: Session):
         json_data = FetchDataFromAirtable.fetchDataFromAirtable(self)
         for record in json_data['records']:
@@ -49,8 +47,8 @@ class Spot(Base):
             surf_break_id = SurfBreak.determineSurfBreakId(session, fields['Surf Break'][0])
             if surf_break_id is None: continue
 
-            # Créer un objet de la classe SurfDestination
-            surf_destination = Spot(
+            # Créer un objet de la classe Spot
+            spotToAdd = Spot(
                 surf_break_id=surf_break_id,
                 address=fields.get('Address', ''),
                 season_begins=peak_surf_season_begins,
@@ -61,11 +59,15 @@ class Spot(Base):
                 created_at=date.today()
             )
 
-            # @Todo ajout d'une boucle for pour initialiser les photos en appelant la méthode de image orm (a faire)
+            # Commit des spots dans la db pour pouvoir récupérer l'id qui vient d'être créé
+            session.add(spotToAdd)
+            session.commit()
 
-
-
-            session.add(surf_destination)
+            # En soit il n'y a pas besoin de la boucle ici, mais elle permet de gérer dans les cas où il y aurait plusieurs photos
+            for i in range(len(fields['Photos'])):
+                photo = fields['Photos'][i]
+                main = True if i == 0 else False
+                Image.insertImageDataFromJson(self, spotToAdd, photo, main, session)
 
             # Commit des changements dans la base de données
         session.commit()

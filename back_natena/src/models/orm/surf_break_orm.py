@@ -33,7 +33,6 @@ class SurfBreak(Base):
 
         session.bulk_save_objects(surf_breaks)
         session.commit()
-        print("Bien joé")
         return surf_breaks
 
     @staticmethod
