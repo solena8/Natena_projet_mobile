@@ -20,13 +20,11 @@ class Spot(Base):
     address: Mapped[str] = mapped_column(String(100))
     # @Todo : gérer le géocode pour générer la latitude et la longitude quand on aura le DTO
     geocode: Mapped[str] = mapped_column(String(), nullable=True)
-    difficulty: Mapped[int]  # @Todo A limiter entre 1 et 5
+    difficulty: Mapped[int]
     link: Mapped[str] = mapped_column(String(), nullable=True)
     season_begins: Mapped[date] = mapped_column(String(), nullable=True)
     season_ends: Mapped[date] = mapped_column(String(), nullable=True)
     created_at: Mapped[datetime] = mapped_column(String())
-
-    # surf_break = relationship("Surf Break", back_populates="spots")
 
     @validates('difficulty')
     def validate_difficulty(self, key, value):
@@ -34,15 +32,7 @@ class Spot(Base):
             raise ValueError("La difficulté doit être comprise entre 1 et 5.")
         return value
 
-    @staticmethod
-    def determineSurfBreakId(session: Session, surf_type) -> int | None:
-        try:
-            surfBreakId = session.execute(select(SurfBreak.id).where(SurfBreak.type == surf_type)).scalar_one()
-            print(f"L'id du surf Break est : {surfBreakId} ")
-            return surfBreakId
-        except NoResultFound:
-            print(f"Aucun SurfBreak trouvé pour le type : {surf_type}")
-            return None
+
 
 
     def insertSurfDataFromJson(self, session: Session):
@@ -55,7 +45,8 @@ class Spot(Base):
             peak_surf_season_ends = datetime.strptime(fields['Peak Surf Season Ends'], '%Y-%m-%d') if fields[
                 'Peak Surf Season Ends'] else None
 
-            surf_break_id = Spot.determineSurfBreakId(session, fields['Surf Break'][0])
+            # utilisation de la méthode de surf break orm pour déterminer l'id de surf break
+            surf_break_id = SurfBreak.determineSurfBreakId(session, fields['Surf Break'][0])
             if surf_break_id is None: continue
 
             # Créer un objet de la classe SurfDestination
@@ -70,7 +61,9 @@ class Spot(Base):
                 created_at=date.today()
             )
 
-            # Boucle for concernant les méthodes
+            # @Todo ajout d'une boucle for pour initialiser les photos en appelant la méthode de image orm (a faire)
+
+
 
             session.add(surf_destination)
 
