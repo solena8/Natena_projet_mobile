@@ -1,1 +1,9 @@
-./src/config/surfdatabse.db
+# Ignore les environnements virtuels
+.venv/
+
+# Ignore les fichiers compilés Python
+__pycache__/
+*.pyc
+
+# Ignore la base de données locale
+src/config/surfdatabase.db
