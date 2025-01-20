@@ -16,7 +16,7 @@ def get_db():
 @app.get("/")
 def get_spot_list_data():
     conn, cur = get_db()
-    fetch_data = "select s.id, sb.type, s.address, i.url from spot s join surf_break sb on sb.id = s.surf_break_id join image i on i.spot_id = s.id"
+    fetch_data = "select s.id, sb.type, s.address, i.url, i.main from spot s join surf_break sb on sb.id = s.surf_break_id join image i on i.spot_id = s.id where i.main = 1"
     cur.execute(fetch_data)
     rows = cur.fetchall()
     data = [dict(row) for row in rows]
