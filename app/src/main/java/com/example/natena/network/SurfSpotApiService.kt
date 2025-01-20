@@ -1,6 +1,8 @@
 package com.example.natena.network
 
 import com.example.natena.BuildConfig
+import com.example.natena.models.Spot
+import com.example.natena.models.SpotDto
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -42,11 +44,11 @@ private val retrofit = Retrofit.Builder()
 // Interface définissant les endpoints de l'API
 // Chaque méthode représente un endpoint différent
 interface SurfSpotApiService {
-    // Endpoint GET sur la racine "/"
-    // La fonction est suspendue pour être utilisée avec Coroutines
     @GET("/")
-    suspend fun getAllItems(): Map<String, Any>
+    suspend fun getAllItems(): List<SpotDto>
 }
+
+
 
 // Object singleton pour accéder à l'API
 // Utilisation du pattern Singleton pour garantir une seule instance
@@ -59,7 +61,6 @@ object SurfSpotApi {
 
 // Fonction utilitaire pour récupérer les données
 // Fonction suspendue pour être utilisée avec les coroutines
-suspend fun fetchAllItems(): Map<String, Any> {
-    val response = SurfSpotApi.retrofitService.getAllItems()
-    return response
+suspend fun fetchAllItems(): List<SpotDto> {
+    return SurfSpotApi.retrofitService.getAllItems()
 }

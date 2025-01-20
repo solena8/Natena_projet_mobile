@@ -31,11 +31,11 @@ class SpotAdapter(context: Context, private val spots: List<Spot>) :
         spot?.let {
             //Chargement de l'image
             Glide.with(context)
-                .load(it.spotImage)
+                .load(it.url)                // Changé de spotImage à url
                 .placeholder(R.drawable.placeholder)
                 .into(imageView)
-            nameTextView.text = it.spotName
-            locationTextView.text = it.spotLocation
+            nameTextView.text = it.type      // Changé de spotName à type
+            locationTextView.text = it.address  // Changé de spotLocation à address
         }
 
         return view

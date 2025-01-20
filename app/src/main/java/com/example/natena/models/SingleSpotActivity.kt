@@ -12,31 +12,22 @@ class SingleSpotActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_single_spot)
 
-        // Récupérer les données transmises via l'intent
-        val spotImage = intent.getStringExtra("spotImage")
-        val spotName = intent.getStringExtra("Location")
-        val spotLocation = intent.getStringExtra("Address")
+        val spotUrl = intent.getStringExtra("url")        // Changé de spotImage à url
+        val spotType = intent.getStringExtra("type")      // Changé de Location à type
+        val spotAddress = intent.getStringExtra("address") // Changé de Address à address
 
-        // Associer les données aux vues
         val imageView = findViewById<ImageView>(R.id.spotImage)
 
-        //Chargement de l'image
-        spotImage?.let {
+        spotUrl?.let {
             Glide.with(this)
                 .load(it)
-                .placeholder(R.drawable.placeholder)
                 .into(imageView)
         }
 
-        findViewById<TextView>(R.id.spotName).text = spotName
-        findViewById<TextView>(R.id.spotLocation).text = spotLocation
-
-        val home = findViewById<Button>(R.id.home)
-
-        home.setOnClickListener {
-            val intent = Intent(this@SingleSpotActivity, MainActivity::class.java)
-            startActivity(intent)
-        }
+        findViewById<TextView>(R.id.spotName).text = spotType
+        findViewById<TextView>(R.id.spotLocation).text = spotAddress
     }
 }
+
+
 
