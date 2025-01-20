@@ -1,6 +1,8 @@
 # Ignore les environnements virtuels
 .venv/
 
+__pycache__
+*.pyc
 
 # Ignore la base de données locale
 src/config/surfdatabase.db
