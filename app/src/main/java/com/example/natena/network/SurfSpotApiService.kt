@@ -1,7 +1,6 @@
 package com.example.natena.network
 
 import com.example.natena.BuildConfig
-import com.example.natena.models.Spot
 import com.example.natena.models.SpotDto
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
@@ -10,6 +9,7 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
+import retrofit2.http.Path
 
 // URL de base de l'API récupérée depuis les variables de build
 const val BACK_API_URL = BuildConfig.BACK_API_URL
@@ -43,10 +43,18 @@ private val retrofit = Retrofit.Builder()
 
 // Interface définissant les endpoints de l'API
 // Chaque méthode représente un endpoint différent
+data class SpotResponse(
+    val spots: List<SpotDto>
+)
+
 interface SurfSpotApiService {
-    @GET("/")
-    suspend fun getAllItems(): List<SpotDto>
+    @GET("/all")
+    suspend fun getAllSpots(): SpotResponse
+
+    @GET("/spot/{id}")
+    suspend fun getSpotById(@Path("id") id: String): SpotResponse
 }
+
 
 
 
@@ -61,6 +69,19 @@ object SurfSpotApi {
 
 // Fonction utilitaire pour récupérer les données
 // Fonction suspendue pour être utilisée avec les coroutines
-suspend fun fetchAllItems(): List<SpotDto> {
-    return SurfSpotApi.retrofitService.getAllItems()
+suspend fun fetchAllSpots(): SpotResponse {
+    return SurfSpotApi.retrofitService.getAllSpots()
+
 }
+
+
+suspend fun fetchSpotById(id: String): SpotDto {
+    val response = SurfSpotApi.retrofitService.getSpotById(id)
+    return response.spots.firstOrNull()
+        ?: throw NoSuchElementException("No spot found with id: $id")
+}
+
+
+
+
+

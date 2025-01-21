@@ -40,11 +40,30 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/spotImage" />
 
+    <TextView
+            android:id="@+id/spotLatitude"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/spotLocation" />
+
+    <TextView
+            android:id="@+id/spotLongitude"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/spotLatitude" />
+
+
     <Button
         android:id="@+id/home"
         android:layout_marginTop="16dp"
         android:layout_width="90dp"
-        android:layout_height="40dp"
+        android:layout_height="48dp"
         android:layout_weight="1"
         android:backgroundTint="@android:color/black"
         android:text="retour"
@@ -52,7 +71,7 @@
         android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/spotLocation" />
+        app:layout_constraintTop_toBottomOf="@id/spotLongitude"
     />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
