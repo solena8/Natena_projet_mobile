@@ -19,7 +19,6 @@ class Spot(Base):
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
     surf_break_id: Mapped[int] = mapped_column(ForeignKey("surf_break.id"))
     address: Mapped[str] = mapped_column(String(100))
-    # @Todo : gérer le géocode pour générer la latitude et la longitude quand on aura le DTO
     geocode: Mapped[str] = mapped_column(String(), nullable=True)
     difficulty: Mapped[int]
     link: Mapped[str] = mapped_column(String(), nullable=True)

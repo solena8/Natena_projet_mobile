@@ -66,10 +66,7 @@ def get_details_for_a_spot(id: int):
             cur.execute(spotQuery, (id,))  # Utilisation de paramètres liés pour éviter l'injection SQL
             spotRows = cur.fetchall()
 
-            cur.execute(imageQuery, (id,))
-            imageRows = cur.fetchall()
-
-            # Transformer les résultats en liste de dictionnaires
+            # Transformer les résultats de la requête spot en liste de dictionnaires
             spotData = []
             for row in spotRows:
                 row_dict = dict(row)
@@ -81,6 +78,9 @@ def get_details_for_a_spot(id: int):
                     raise HTTPException(status_code=500, detail=f"Erreur avec le geocode: {e}")
                 spotData.append(row_dict)
 
+            # Transformer les résultats de la requête image en liste de dictionnaires
+            cur.execute(imageQuery, (id,))
+            imageRows = cur.fetchall()
             imageData = []
             for row in imageRows:
                 row_dict = dict(row)

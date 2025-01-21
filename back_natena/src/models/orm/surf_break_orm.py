@@ -11,8 +11,6 @@ class SurfBreak(Base):
     id: Mapped[int] = mapped_column(primary_key=True)
     type: Mapped[str] = mapped_column(String(30))
 
-    # spots = relationship("Spot", back_populates="surf_break")
-
     @staticmethod
     # On pourrait mettre les surfs break dans un Json à part
     def insertSurfBreak(session:Session):
