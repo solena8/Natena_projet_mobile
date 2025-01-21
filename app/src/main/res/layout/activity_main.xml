@@ -1,24 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:id="@+id/main"
+<androidx.constraintlayout.widget.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:divider="#000"
-        android:dividerHeight="4dp"
-        android:gravity="center"
-        tools:context=".MainActivity">
+        android:id="@+id/main">
 
-        <ListView
+    <ListView
             android:id="@+id/spotlist"
-            android:layout_width="300dp"
-            android:layout_height="500dp"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
             android:divider="#000"
-            android:dividerHeight="4dp" />
-    </RelativeLayout>
+            android:dividerHeight="4dp"
+            android:scrollbars="vertical"
+            android:fadeScrollbars="false"
+            android:nestedScrollingEnabled="true"
+            android:smoothScrollbar="true"
+            android:fastScrollEnabled="true"
+            android:scrollbarStyle="outsideOverlay"
+            android:clipToPadding="false"
+            android:overScrollMode="always"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintWidth_percent="0.8"
+            app:layout_constraintHeight_percent="0.9" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
