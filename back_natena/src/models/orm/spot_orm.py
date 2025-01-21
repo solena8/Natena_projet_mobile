@@ -1,5 +1,6 @@
 from datetime import date, datetime
 
+from self import self
 from sqlalchemy import String, ForeignKey
 from sqlalchemy.orm import Mapped
 from sqlalchemy.orm import Session, validates
@@ -33,7 +34,7 @@ class Spot(Base):
         return value
 
 
-    def insertSurfDataFromJson(self, session: Session):
+    def insertSurfDataFromJson(session: Session):
         json_data = FetchDataFromAirtable.fetchDataFromAirtable(self)
         for record in json_data['records']:
             fields = record['fields']
@@ -67,7 +68,7 @@ class Spot(Base):
             for i in range(len(fields['Photos'])):
                 photo = fields['Photos'][i]
                 main = True if i == 0 else False
-                Image.insertImageDataFromJson(self, spotToAdd, photo, main, session)
+                Image.insertImageDataFromJson(spotToAdd, photo, main, session)
 
             # Commit des changements dans la base de données
         session.commit()

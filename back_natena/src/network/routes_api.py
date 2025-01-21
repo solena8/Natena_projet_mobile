@@ -45,28 +45,33 @@ def get_spot_list_data():
 
 @app.get("/spot/{id}")
 def get_details_for_a_spot(id: int):
-    query = """
+    spotQuery = """
         SELECT 
-            s.id, sb.type, s.address, i.url, i.main, s.geocode
+            s.id, sb.type, s.address, s.geocode, s.difficulty
         FROM 
             spot s
         JOIN 
             surf_break sb ON sb.id = s.surf_break_id
-        JOIN 
-            image i ON i.spot_id = s.id
         WHERE 
             s.id = ?
+    """
+    imageQuery = """
+        SELECT * FROM image i
+        WHERE i.spot_id = ?
     """
     try:
         with get_db() as conn:
             conn.row_factory = Row
             cur = conn.cursor()
-            cur.execute(query, (id,))  # Utilisation de paramètres liés pour éviter l'injection SQL
-            rows = cur.fetchall()
+            cur.execute(spotQuery, (id,))  # Utilisation de paramètres liés pour éviter l'injection SQL
+            spotRows = cur.fetchall()
+
+            cur.execute(imageQuery, (id,))
+            imageRows = cur.fetchall()
 
             # Transformer les résultats en liste de dictionnaires
-            data = []
-            for row in rows:
+            spotData = []
+            for row in spotRows:
                 row_dict = dict(row)
                 try:
                     latitude, longitude = SpotDto.convertGeocode(row_dict.pop("geocode"))
@@ -74,7 +79,16 @@ def get_details_for_a_spot(id: int):
                     row_dict["longitude"] = longitude
                 except ValueError as e:
                     raise HTTPException(status_code=500, detail=f"Erreur avec le geocode: {e}")
-                data.append(row_dict)
-            return {"spots": data}
+                spotData.append(row_dict)
+
+            imageData = []
+            for row in imageRows:
+                row_dict = dict(row)
+                imageData.append(row_dict)
+
+            return {
+                "spot": spotData,
+                "images": imageData
+                    }
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to fetch data: {e}")
