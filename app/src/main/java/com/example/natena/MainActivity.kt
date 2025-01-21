@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
+import com.example.natena.models.SingleSpotActivity
 import com.example.natena.models.Spot
 import com.example.natena.models.SpotAdapter
 import com.example.natena.models.SpotDto
