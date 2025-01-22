@@ -39,6 +39,7 @@ class SingleSpotActivity : AppCompatActivity() {
                 // Set the text for various TextViews with spot details
                 findViewById<TextView>(R.id.spotName).text = spot.type
                 findViewById<TextView>(R.id.spotLocation).text = spot.address
+                findViewById<TextView>(R.id.spotDifficulty).text = "${spot.difficulty}"
                 findViewById<TextView>(R.id.spotLatitude).text = "Latitude: ${spot.latitude}"
                 findViewById<TextView>(R.id.spotLongitude).text = "Longitude: ${spot.longitude}"
 
