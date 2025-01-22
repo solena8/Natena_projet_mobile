@@ -94,3 +94,20 @@ def get_details_for_a_spot(id: int):
                     }
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to fetch data: {e}")
+
+@app.post("/spots")
+def insert_new_spot():
+    query = """
+        
+    """
+    # try:
+    #     with get_db() as conn:  # Gestion automatique de la fermeture de la connexion
+    #         cur = conn.cursor()
+    #         cur.execute(query)
+    #         rows = cur.fetchall()
+    #
+    #         # Transformer les résultats en liste de dictionnaires
+    #         data = [dict(row) for row in rows]
+    #         return {"spots": data}
+    # except sqlite3.Error as e:
+    #     raise HTTPException(status_code=500, detail=f"Failed to fetch data: {e}")
