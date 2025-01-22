@@ -61,6 +61,17 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/spotLatitude" />
 
+
+    <!-- TextView to display the spot longitude -->
+    <TextView
+            android:id="@+id/spotDifficulty"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/spotLongitude" />
+
     <!-- Button to return to the home screen -->
     <Button
             android:id="@+id/home"
@@ -74,7 +85,7 @@
             android:textSize="14sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/spotLongitude"
+            app:layout_constraintTop_toBottomOf="@id/spotDifficulty"
             />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
