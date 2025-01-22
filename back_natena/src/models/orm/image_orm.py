@@ -16,7 +16,7 @@ class Image(Base):
     # Méthode appelée au sein de Spot.insertSurfDataFromJson() dans une boucle for pour insérer les photos dans la db dans la table image
     # Permet d'éviter de refaire un appel API.
     @staticmethod
-    def insertImageDataFromJson(self, record, photo, main, session: Session):
+    def insertImageDataFromJson(record, photo, main, session: Session):
         imageToAdd = Image(
             spot_id = record.id,
             url = photo['url'],

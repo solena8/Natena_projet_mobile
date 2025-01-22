@@ -1,4 +1,3 @@
-from self import self
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy_utils import database_exists, create_database
@@ -25,4 +24,4 @@ session = Session()
 
 # Insertion des données
 SurfBreak.insertSurfBreak(session)
-Spot.insertSurfDataFromJson(self, session)
+Spot.insertSurfDataFromJson(session)

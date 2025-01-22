@@ -6,3 +6,4 @@ __pycache__
 
 # Ignore la base de données locale
 src/config/surfdatabase.db
+src/config/.env
