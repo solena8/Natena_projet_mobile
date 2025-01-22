@@ -49,7 +49,7 @@ def get_details_for_a_spot(id: int):
         SELECT 
             s.id, sb.type, s.address, s.geocode, s.difficulty
         FROM 
-            spot s
+            spot ssource venv/bin
         JOIN 
             surf_break sb ON sb.id = s.surf_break_id
         WHERE 

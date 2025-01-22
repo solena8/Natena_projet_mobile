@@ -6,6 +6,7 @@
         android:layout_height="match_parent"
         android:id="@+id/main">
 
+    <!-- ListView pour afficher une liste -->
     <ListView
             android:id="@+id/spotlist"
             android:layout_width="0dp"
@@ -21,10 +22,24 @@
             android:clipToPadding="false"
             android:overScrollMode="always"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/fabAddSpot"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintWidth_percent="0.8"
-            app:layout_constraintHeight_percent="0.9" />
+            app:layout_constraintWidth_percent="0.8" />
+
+    <!-- Bouton en dessous de la liste -->
+    <Button
+            android:id="@+id/fabAddSpot"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:backgroundTint="@android:color/black"
+            android:text="Add Spot"
+            android:textColor="@android:color/white"
+            android:textSize="14sp"
+            app:layout_constraintTop_toBottomOf="@id/spotlist"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
