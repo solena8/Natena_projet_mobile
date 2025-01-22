@@ -42,17 +42,17 @@ def get_spot_list_data():
     except sqlite3.Error as e:
         raise HTTPException(status_code=500, detail=f"Failed to fetch data: {e}")
 
-
+# Version avec plusieurs images, qui ne matche pas avec le front
 @app.get("/spot/{id}")
 def get_details_for_a_spot(id: int):
     spotQuery = """
-        SELECT 
+        SELECT
             s.id, sb.type, s.address, s.geocode, s.difficulty
-        FROM 
+        FROM
             spot s
-        JOIN 
+        JOIN
             surf_break sb ON sb.id = s.surf_break_id
-        WHERE 
+        WHERE
             s.id = ?
     """
     imageQuery = """
@@ -95,6 +95,43 @@ def get_details_for_a_spot(id: int):
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to fetch data: {e}")
 
+
+# Version avec une seule image, qui match avec le front
+# @app.get("/spot/{id}")
+# def get_details_for_a_spot(id: int):
+#     query = """
+#         SELECT
+#             s.id, sb.type, s.address, i.url, i.main, s.geocode, s.difficulty
+#         FROM
+#             spot s
+#         JOIN
+#             surf_break sb ON sb.id = s.surf_break_id
+#         JOIN
+#             image i ON i.spot_id = s.id
+#         WHERE
+#             s.id = ?
+#     """
+#     try:
+#         with get_db() as conn:
+#             conn.row_factory = Row
+#             cur = conn.cursor()
+#             cur.execute(query, (id,))  # Utilisation de paramètres liés pour éviter l'injection SQL
+#             rows = cur.fetchall()
+#             # Transformer les résultats en liste de dictionnaires
+#             data = []
+#             for row in rows:
+#                 row_dict = dict(row)
+#                 try:
+#                     latitude, longitude = SpotDto.convertGeocode(row_dict.pop("geocode"))
+#                     row_dict["latitude"] = latitude
+#                     row_dict["longitude"] = longitude
+#                 except ValueError as e:
+#                     raise HTTPException(status_code=500, detail=f"Erreur avec le geocode: {e}")
+#                 data.append(row_dict)
+#             return {"spots": data}
+#     except Exception as e:
+#         raise HTTPException(status_code=500, detail=f"Failed to fetch data: {e}")
+
 @app.post("/spots")
 def insert_new_spot():
     query = """
@@ -111,3 +148,4 @@ def insert_new_spot():
     #         return {"spots": data}
     # except sqlite3.Error as e:
     #     raise HTTPException(status_code=500, detail=f"Failed to fetch data: {e}")
+
