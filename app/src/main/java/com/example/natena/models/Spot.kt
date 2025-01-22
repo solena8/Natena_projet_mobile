@@ -9,6 +9,9 @@ data class Spot(
     val type: String,     // Type or category of the spot
     val address: String,  // Address or location of the spot
     val url: String,       // URL for an image or additional information about the spot
+    val main: Int,
+    val latitude: Double,
+    val longitude: Double,
     val difficulty: Int
 )
 
@@ -20,5 +23,8 @@ fun SpotDto.toSpot() = Spot(
     type = type,         // Map type from SpotDto to Spot
     address = address,   // Map address from SpotDto to Spot
     url = url,            // Map url from SpotDto to Spot
+    main = main,
+    latitude = latitude,
+    longitude = longitude,
     difficulty = difficulty
 )

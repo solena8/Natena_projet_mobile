@@ -49,7 +49,7 @@ def get_details_for_a_spot(id: int):
         SELECT 
             s.id, sb.type, s.address, s.geocode, s.difficulty
         FROM 
-            spot ssource venv/bin
+            spot s
         JOIN 
             surf_break sb ON sb.id = s.surf_break_id
         WHERE 
@@ -63,7 +63,9 @@ def get_details_for_a_spot(id: int):
         with get_db() as conn:
             conn.row_factory = Row
             cur = conn.cursor()
-            cur.execute(spotQuery, (id,))  # Utilisation de paramètres liés pour éviter l'injection SQL
+            cur.execute(spotQuery, (id,))
+            # id en parametre permet de définir le ? de s.id = ?
+            # Utilisation de paramètres liés pour éviter l'injection SQL
             spotRows = cur.fetchall()
 
             # Transformer les résultats de la requête spot en liste de dictionnaires

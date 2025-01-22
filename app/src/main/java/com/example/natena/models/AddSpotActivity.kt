@@ -1,11 +1,13 @@
 package com.example.natena.models
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
+import com.example.natena.MainActivity
 import com.example.natena.R
 import com.example.natena.network.SurfSpotApi
 import kotlinx.coroutines.launch
@@ -21,6 +23,8 @@ class AddSpotActivity : AppCompatActivity() {
     private lateinit var etLatitude: EditText
     private lateinit var etLongitude: EditText
     private lateinit var btnSubmit: Button
+    private lateinit var home: Button
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,6 +42,8 @@ class AddSpotActivity : AppCompatActivity() {
         etLatitude = findViewById(R.id.etLatitude)
         etLongitude = findViewById(R.id.etLongitude)
         btnSubmit = findViewById(R.id.btnSubmit)
+        home = findViewById<Button>(R.id.home)
+
     }
 
     private fun setupListeners() {
@@ -45,6 +51,12 @@ class AddSpotActivity : AppCompatActivity() {
             if (validateInput()) {
                 submitSpot()
             }
+        }
+        // Set a click listener for the home button
+        home.setOnClickListener {
+            // Create an intent to navigate back to the MainActivity
+            val intent = Intent(this@AddSpotActivity, MainActivity::class.java)
+            startActivity(intent)
         }
     }
 
@@ -77,6 +89,9 @@ class AddSpotActivity : AppCompatActivity() {
             } catch (e: Exception) {
                 Toast.makeText(this@AddSpotActivity, "Error: ${e.message}", Toast.LENGTH_SHORT).show()
             }
+
+
         }
+
     }
 }

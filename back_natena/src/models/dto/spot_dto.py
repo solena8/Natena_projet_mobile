@@ -36,7 +36,7 @@ class SpotDto:
             created_at=spot.created_at
         )
 
-    @classmethod
+    # @classmethod
     def convertGeocode(cls, geocode):
         geocodeJson = base64.b64decode(geocode)
         print("Json geocode", geocodeJson)
@@ -45,3 +45,4 @@ class SpotDto:
         lat = geocodeDict["o"]["lat"]
         lng = geocodeDict["o"]["lng"]
         return lat, lng
+
