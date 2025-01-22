@@ -80,12 +80,12 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:backgroundTint="@android:color/black"
-            android:text="retour"
+            android:text="Retour"
             android:textColor="@android:color/white"
             android:textSize="14sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/spotDifficulty"
-            />
+            tools:ignore="HardcodedText" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

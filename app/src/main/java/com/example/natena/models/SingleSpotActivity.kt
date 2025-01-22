@@ -1,5 +1,6 @@
 package com.example.natena.models
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
@@ -15,6 +16,7 @@ import kotlinx.coroutines.launch
 
 // This activity displays details of a single spot
 class SingleSpotActivity : AppCompatActivity() {
+    @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         // Set the layout for this activity
