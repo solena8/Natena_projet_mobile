@@ -1,3 +1,4 @@
+
 from requests import Session
 from sqlalchemy import String, select
 from sqlalchemy.exc import NoResultFound
@@ -10,6 +11,8 @@ class SurfBreak(Base):
     __tablename__ = 'surf_break'
     id: Mapped[int] = mapped_column(primary_key=True)
     type: Mapped[str] = mapped_column(String(30))
+    # relation ajoutée pour faire fonctionner l'orm avec sql aclchemy
+    spots = relationship("Spot", back_populates="surf_break")
 
     @staticmethod
     # On pourrait mettre les surfs break dans un Json à part
@@ -43,3 +46,4 @@ class SurfBreak(Base):
         except NoResultFound:
             print(f"Aucun SurfBreak trouvé pour le type : {surf_type}")
             return None
+

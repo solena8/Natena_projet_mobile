@@ -5,6 +5,7 @@ from sqlalchemy import String, ForeignKey
 from sqlalchemy.orm import Mapped
 from sqlalchemy.orm import Session, validates
 from sqlalchemy.orm import mapped_column
+from sqlalchemy.orm import relationship
 
 from src.config.fetch_data_from_airtable import FetchDataFromAirtable
 from src.models.orm.base_orm import Base
@@ -25,6 +26,8 @@ class Spot(Base):
     season_begins: Mapped[date] = mapped_column(String(), nullable=True)
     season_ends: Mapped[date] = mapped_column(String(), nullable=True)
     created_at: Mapped[datetime] = mapped_column(String())
+    surf_break = relationship("SurfBreak", back_populates="spots")
+    images = relationship("Image", back_populates="spot")
 
     @validates('difficulty')
     def validate_difficulty(self, key, value):
