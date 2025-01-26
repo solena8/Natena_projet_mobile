@@ -1,57 +1,75 @@
-from datetime import date, datetime
-
-from self import self
-from sqlalchemy import String, ForeignKey
-from sqlalchemy.orm import Mapped
-from sqlalchemy.orm import Session, validates
-from sqlalchemy.orm import mapped_column
-from sqlalchemy.orm import relationship
-
-from src.config.fetch_data_from_airtable import FetchDataFromAirtable
+# src/models/orm/spot_orm.py
+from datetime import datetime, timezone
+from sqlalchemy import String, ForeignKey, Date, DateTime
+from sqlalchemy.orm import Mapped, mapped_column, relationship, validates
 from src.models.orm.base_orm import Base
-from src.models.orm.image_orm import Image
+from src.config.fetch_data_from_airtable import FetchDataFromAirtable
 from src.models.orm.surf_break_orm import SurfBreak
+from src.models.orm.image_orm import Image
 
 
-# Vérifier si on a besoin de rajouter des relationships dans notre orm
 class Spot(Base):
     __tablename__ = 'spot'
-    # mapped_column() permet de caractériser plus fortement les champs
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
-    surf_break_id: Mapped[int] = mapped_column(ForeignKey("surf_break.id"))
+    surf_break_id: Mapped[int | None] = mapped_column(ForeignKey("surf_break.id"), nullable=True)
     address: Mapped[str] = mapped_column(String(100))
     geocode: Mapped[str] = mapped_column(String(), nullable=True)
     difficulty: Mapped[int]
     link: Mapped[str] = mapped_column(String(), nullable=True)
-    season_begins: Mapped[date] = mapped_column(String(), nullable=True)
-    season_ends: Mapped[date] = mapped_column(String(), nullable=True)
-    created_at: Mapped[datetime] = mapped_column(String())
+    season_begins: Mapped[datetime] = mapped_column(DateTime(), nullable=True)
+    season_ends: Mapped[datetime] = mapped_column(DateTime(), nullable=True)
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True),  # Add timezone support
+        nullable=False)
     surf_break = relationship("SurfBreak", back_populates="spots")
-    images = relationship("Image", back_populates="spot")
+    images = relationship("Image", back_populates="spot") \
 
-    @validates('difficulty')
+    @ validates('difficulty')
+
     def validate_difficulty(self, key, value):
-        if not(1 <= value <= 5):
-            raise ValueError("La difficulté doit être comprise entre 1 et 5.")
+        if not (1 <= value <= 5):
+            raise ValueError("Difficulty must be between 1 and 5")
         return value
 
+    @classmethod
+    def insertSurfDataFromJson(cls, session):
 
-    def insertSurfDataFromJson(session: Session):
-        json_data = FetchDataFromAirtable.fetchDataFromAirtable(self)
+        json_data = FetchDataFromAirtable.fetchDataFromAirtable(cls)
+
+        # Récupérer ou créer un surf break par défaut car certains spots n'ont pas de surfbreak
+        default_surf_break = session.query(SurfBreak).filter_by(type="No Surf Break").first()
+        if not default_surf_break:
+            default_surf_break = SurfBreak(
+                type="No Surf Break",
+            )
+            session.add(default_surf_break)
+            session.commit()
+
+        default_surf_break_id = default_surf_break.id
+
         for record in json_data['records']:
             fields = record['fields']
 
-            peak_surf_season_begins = datetime.strptime(fields['Peak Surf Season Begins'], '%Y-%m-%d') if fields[
-                'Peak Surf Season Begins'] else None
-            peak_surf_season_ends = datetime.strptime(fields['Peak Surf Season Ends'], '%Y-%m-%d') if fields[
-                'Peak Surf Season Ends'] else None
+            # Parsing des dates
+            peak_surf_season_begins = datetime.strptime(
+                fields['Peak Surf Season Begins'],
+                '%Y-%m-%d'
+            ) if fields.get('Peak Surf Season Begins') else None
 
-            # utilisation de la méthode de surf break orm pour déterminer l'id de surf break
-            surf_break_id = SurfBreak.determineSurfBreakId(session, fields['Surf Break'][0])
-            if surf_break_id is None: continue
+            peak_surf_season_ends = datetime.strptime(
+                fields['Peak Surf Season Ends'],
+                '%Y-%m-%d'
+            ) if fields.get('Peak Surf Season Ends') else None
 
-            # Créer un objet de la classe Spot
-            spotToAdd = Spot(
+            # Déterminer le surf_break_id
+            surf_break_id = default_surf_break_id
+            if 'Surf Break' in fields and fields['Surf Break']:
+                surf_type = fields['Surf Break'][0]
+                if surf_type in ['Reef Break', 'Point Break', 'Beach Break', 'River Break', 'Artificial Wave Break']:
+                    surf_break_id = SurfBreak.determineSurfBreakId(session, surf_type) or default_surf_break_id
+
+            # Créer une instance Spot
+            spot = cls(
                 surf_break_id=surf_break_id,
                 address=fields.get('Address', ''),
                 season_begins=peak_surf_season_begins,
@@ -59,18 +77,14 @@ class Spot(Base):
                 difficulty=fields['Difficulty Level'],
                 link=fields.get('Magic Seaweed Link', ''),
                 geocode=fields.get('Geocode', ''),
-                created_at=date.today()
+                created_at=datetime.now(timezone.utc)
             )
-
-            # Commit des spots dans la db pour pouvoir récupérer l'id qui vient d'être créé
-            session.add(spotToAdd)
+            session.add(spot)
             session.commit()
 
-            # En soit il n'y a pas besoin de la boucle ici, mais elle permet de gérer dans les cas où il y aurait plusieurs photos
             for i in range(len(fields['Photos'])):
                 photo = fields['Photos'][i]
-                main = True if i == 0 else False
-                Image.insertImageDataFromJson(spotToAdd, photo, main, session)
+                main = 1 if i == 0 else 0
+                Image.insertImageDataFromJson(spot, photo, main, session)
 
-            # Commit des changements dans la base de données
-        session.commit()
+            session.commit()
