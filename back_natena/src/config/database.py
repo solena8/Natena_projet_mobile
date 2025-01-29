@@ -11,17 +11,23 @@ engine = create_engine("sqlite:///surfdatabase.db", echo=True)
 if not database_exists(engine.url):
     create_database(engine.url)
 
-# Il semblerait que c'est une meilleure pratique de faire juste engine, à voir (ça fonctionne en tout cas).
-# Base.metadata.create_all(engine)
-
 Base.metadata.create_all(engine, tables=[SurfBreak.__table__])
 Base.metadata.create_all(engine, tables=[Spot.__table__])
 Base.metadata.create_all(engine, tables=[Image.__table__])
 
-# Création d'une session
+# Création de la factory de session
 Session = sessionmaker(bind=engine)
-session = Session()
 
-# Insertion des données
-SurfBreak.insertSurfBreak(session)
-Spot.insertSurfDataFromJson(session)
+# gestion de la session qui fait en sorte de bien la fermer ce qui évite des pb
+def get_db_session():
+    session = Session()
+    try:
+        yield session
+    finally:
+        session.close()
+
+# Initialisation des données
+with Session() as session:
+    SurfBreak.insertSurfBreak(session)
+    Spot.insertSurfDataFromJson(session)
+
