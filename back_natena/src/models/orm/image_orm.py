@@ -1,14 +1,7 @@
 
+from sqlalchemy import ForeignKey, Boolean, String, Integer
 from requests import Session
-from sqlalchemy import ForeignKey, Boolean, String
-from sqlalchemy.orm import Mapped, mapped_column
-
-from src.models.orm.base_orm import Base
-
-
-
-from requests import Session
-from sqlalchemy import ForeignKey, Boolean, String
+from sqlalchemy import ForeignKey, String
 from sqlalchemy.orm import Mapped, mapped_column
 from sqlalchemy.orm import relationship
 
@@ -20,7 +13,7 @@ class Image(Base):
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
     spot_id: Mapped[int] = mapped_column(ForeignKey("spot.id"))
     url: Mapped[str] = mapped_column(String)
-    main: Mapped[bool] = mapped_column(Boolean, nullable=True)
+    main: Mapped[int] = mapped_column(Integer, nullable=True)
     # relation ajoutée pour faire fonctionner l'orm avec sql aclchemy
     spot = relationship("Spot", back_populates="images")
 
