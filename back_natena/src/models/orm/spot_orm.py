@@ -1,11 +1,12 @@
 # src/models/orm/spot_orm.py
 from datetime import datetime, timezone
-from sqlalchemy import String, ForeignKey, Date, DateTime
+from sqlalchemy import String, ForeignKey, DateTime
 from sqlalchemy.orm import Mapped, mapped_column, relationship, validates
 from src.models.orm.base_orm import Base
 from src.config.fetch_data_from_airtable import FetchDataFromAirtable
 from src.models.orm.surf_break_orm import SurfBreak
 from src.models.orm.image_orm import Image
+from src.config.db_instance import db
 
 
 class Spot(Base):
@@ -32,41 +33,39 @@ class Spot(Base):
         return value
 
     @classmethod
-    def insertSurfDataFromJson(cls, session):
+    def insertSurfDataFromJson(cls):
+        with db.get_session() as session:
+            json_data = FetchDataFromAirtable.fetchDataFromAirtable(cls)
 
-        json_data = FetchDataFromAirtable.fetchDataFromAirtable(cls)
+            # Récupérer ou créer un surf break par défaut
+            default_surf_break = session.query(SurfBreak).filter_by(type="No Surf Break").first()
+            if not default_surf_break:
+                default_surf_break = SurfBreak(type="No Surf Break")
+                session.add(default_surf_break)
+                session.commit()
 
-        # Récupérer ou créer un surf break par défaut car certains spots n'ont pas de surfbreak
-        default_surf_break = session.query(SurfBreak).filter_by(type="No Surf Break").first()
-        if not default_surf_break:
-            default_surf_break = SurfBreak(
-                type="No Surf Break",
-            )
-            session.add(default_surf_break)
-            session.commit()
+            default_surf_break_id = default_surf_break.id
 
-        default_surf_break_id = default_surf_break.id
+            for record in json_data['records']:
+                fields = record['fields']
 
-        for record in json_data['records']:
-            fields = record['fields']
+                # Parsing des dates
+                peak_surf_season_begins = datetime.strptime(
+                    fields['Peak Surf Season Begins'],
+                    '%Y-%m-%d'
+                ) if fields.get('Peak Surf Season Begins') else None
 
-            # Parsing des dates
-            peak_surf_season_begins = datetime.strptime(
-                fields['Peak Surf Season Begins'],
-                '%Y-%m-%d'
-            ) if fields.get('Peak Surf Season Begins') else None
+                peak_surf_season_ends = datetime.strptime(
+                    fields['Peak Surf Season Ends'],
+                    '%Y-%m-%d'
+                ) if fields.get('Peak Surf Season Ends') else None
 
-            peak_surf_season_ends = datetime.strptime(
-                fields['Peak Surf Season Ends'],
-                '%Y-%m-%d'
-            ) if fields.get('Peak Surf Season Ends') else None
-
-            # Déterminer le surf_break_id
-            surf_break_id = default_surf_break_id
-            if 'Surf Break' in fields and fields['Surf Break']:
-                surf_type = fields['Surf Break'][0]
-                if surf_type in ['Reef Break', 'Point Break', 'Beach Break', 'River Break', 'Artificial Wave Break']:
-                    surf_break_id = SurfBreak.determineSurfBreakId(session, surf_type) or default_surf_break_id
+                # Déterminer le surf_break_id
+                surf_break_id = default_surf_break_id
+                if 'Surf Break' in fields and fields['Surf Break']:
+                    surf_type = fields['Surf Break'][0]
+                    if surf_type in ['Reef Break', 'Point Break', 'Beach Break', 'River Break', 'Artificial Wave Break']:
+                        surf_break_id = SurfBreak.determineSurfBreakId(surf_type) or default_surf_break_id
 
             # Créer une instance Spot
             spot = cls(
