@@ -1,7 +1,8 @@
 # src/routes/routes_api.py
 from fastapi import FastAPI, HTTPException
 from sqlalchemy.exc import SQLAlchemyError
-from src.config.database import Session
+
+from src.config.db_instance import db
 from src.models.orm.spot_orm import Spot
 from src.models.orm.surf_break_orm import SurfBreak
 from src.models.orm.image_orm import Image
@@ -12,7 +13,7 @@ app = FastAPI()
 @app.get("/all")
 def get_spot_list_data():
     try:
-        with Session() as session:
+        with db.get_session() as session:
             spots = session.query(Spot) \
                 .join(SurfBreak) \
                 .join(Image) \
@@ -28,7 +29,7 @@ def get_spot_list_data():
 @app.get("/spot/{id}")
 def get_details_for_a_spot(id: int):
     try:
-        with Session() as session:
+        with db.get_session() as session:
             spot = session.query(Spot) \
                 .join(SurfBreak) \
                 .join(Image) \
